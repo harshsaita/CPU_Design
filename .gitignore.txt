@@ -1,0 +1,21 @@
+# Vivado generated files
+*.jou
+*.log
+*.str
+*.pb
+*.xpr
+*.bit
+*.dcp
+*.rpt
+*.xml
+*.html
+/HX_32.runs/
+/HX_32.sim/
+/HX_32.cache/
+/HX_32.ip_user_files/
+/HX_32.hw/
+/.Xil/
+
+# Windows
+Thumbs.db
+Desktop.ini
