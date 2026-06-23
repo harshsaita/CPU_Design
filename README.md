@@ -1,20 +1,29 @@
 # Why I Built This
 
-This project started while I was revisiting Computer Architecture and Computer Arithmetic concepts beyond coursework. While studying lecture notes by Dr. Smruti R. Sarangi (IIT Delhi), I explored the underlying algorithms behind arithmetic operations such as addition, subtraction, multiplication, and division and became interested in how these ideas translate into actual hardware.
+This project started while I was revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework. While studying the lecture notes of Dr. Smruti R. Sarangi (IIT Delhi), I became interested in understanding not only how arithmetic operations work mathematically but also how they are realized at the hardware level.
 
-Instead of stopping at theoretical understanding, I wanted to implement these concepts at the RTL level and build a system that demonstrates how arithmetic units operate internally.
+I explored the algorithms behind addition, subtraction, multiplication, division, and logical operations and wanted to recreate them through RTL design instead of treating them as abstract concepts.
 
-Most beginner CPU projects focus directly on implementing standard architectures such as RISC-V RV32I. I wanted to approach the problem differently — starting from the arithmetic engine itself and experimenting with additional functionality, design decisions, and architectural exploration.
+Rather than directly implementing a standard RV32I processor, I decided to begin with the arithmetic core and build something that extends beyond the conventional instruction set.
 
-This repository documents that journey from algorithm → digital logic → RTL implementation → simulation → synthesis.
+This ALU supports the fundamental operations inspired by the RV32I ISA and additionally includes a few custom instructions influenced by concepts I encountered in Microcontrollers and Embedded Systems coursework.
 
-Through this project, I explored:
+Some of the additional operations include:
 
-* Digital Design principles
-* RTL Design methodology
-* Verilog implementation
-* Arithmetic datapath construction
-* Functional verification through testbenches
-* Timing and hardware realization concepts
+* ROR (Rotate Right)
+* ROL (Rotate Left)
+* CRC-related operations for communication-oriented computation
 
-This is not just an implementation exercise but an effort to bridge architectural theory with practical hardware design.
+These instructions are commonly associated with low-level embedded and communication workflows and have historically appeared in processor-oriented systems and instruction extensions.
+
+The goal of this project was not only to reproduce existing architecture but to experiment with extending it and understanding the design tradeoffs at the RTL level.
+
+This repository currently contains:
+
+* RTL implementation
+* Testbench and simulation environment
+* Functional verification
+* Design documentation
+
+Future work:
+This project will continue evolving beyond an ALU implementation. Additional modules and files will be added to the `rtl/` and `sim/` directories with the long-term objective of developing a more complete custom CPU architecture.
