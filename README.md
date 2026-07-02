@@ -98,7 +98,7 @@ The processor consists of the following major blocks:
 | Register File |-------------->|      ALU       |
 +-------+-------+               +--------+-------+
         |                                       |
-        |Basically execution of some Operation  v                               
+        |           Simply execution            v                               
         |                       +----------------+
         +---------------------->|  Data Memory   |
                                 +----------------+
