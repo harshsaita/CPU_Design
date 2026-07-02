@@ -65,7 +65,7 @@ The processor consists of the following major blocks:
 
 ---
 
-# Datapath
+# Flow of Architecture 
 ```
                 +--------------------+
                 |    Assembly Code   |
@@ -97,14 +97,14 @@ The processor consists of the following major blocks:
 +---------------+               +----------------+
 | Register File |-------------->|      ALU       |
 +-------+-------+               +--------+-------+
-        |                                 |
-        |                                 v
+        |                                       |
+        |Basically execution of some Operation  v                               
         |                       +----------------+
         +---------------------->|  Data Memory   |
                                 +----------------+
 
                        +----------------+
-                       | Stack Pointer  |
+                       | Stack Pointer  | Stack Involvement
                        +----------------+
 
 ```
