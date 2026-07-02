@@ -66,10 +66,19 @@ The processor consists of the following major blocks:
 ---
 
 # Datapath
-
 ```
                 +--------------------+
-                | Program Counter    |
+                |    Assembly Code   |
+                +--------------------+
+                          |
+                          v
+                +--------------------+
+                |     Assembler      |
+                +--------------------+
+                          |
+                          v
+                +--------------------+
+                | Program mem file   |
                 +---------+----------+
                           |
                           v
