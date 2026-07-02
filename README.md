@@ -1,29 +1,457 @@
 # Why I Built This
 
-This project started while I was revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework. While studying the lecture notes of Dr. Smruti R. Sarangi (IIT Delhi), I became interested in understanding not only how arithmetic operations work mathematically but also how they are realized at the hardware level.
+This project started while I was revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework. While studying the lecture notes of Dr. Smruti R. Sarangi (IIT Delhi).
+This project help me learn how to build a Custom ISA , Which kind of instructions are neccessary and which are not , And Of course the Use of AI when you are Stuck with your code and Debugging or Writing Testbenches
 
-I explored the algorithms behind addition, subtraction, multiplication, division, and logical operations and wanted to recreate them through RTL design instead of treating them as abstract concepts.
+# HX32 CPU
 
-Rather than directly implementing a standard RV32I processor, I decided to begin with the arithmetic core and build something that extends beyond the conventional instruction set.
+A custom 32-bit single-cycle RISC processor written entirely in Verilog HDL as an exploration into computer architecture, instruction set design and RTL implementation.
 
-This ALU supports the fundamental operations inspired by the RV32I ISA and additionally includes a few custom instructions influenced by concepts I encountered in Microcontrollers and Embedded Systems coursework.
+HX32 started as a standalone ALU project and gradually evolved into a complete processor featuring a custom ISA, stack support, subroutine handling and an assembler for easier program development and ISA verification.
 
-Some of the additional operations include:
+---
 
-* ROR (Rotate Right)
-* ROL (Rotate Left)
-* CRC-related operations for communication-oriented computation
+# Motivation
 
-These instructions are commonly associated with low-level embedded and communication workflows and have historically appeared in processor-oriented systems and instruction extensions.
+This project began while revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework.
 
-The goal of this project was not only to reproduce existing architecture but to experiment with extending it and understanding the design tradeoffs at the RTL level.
+The initial objective was to understand how arithmetic and logical operations are implemented in hardware by designing a custom ALU from scratch in Verilog.
 
-This repository currently contains:
+As the ALU grew in complexity with additional instructions and optimizations, the project naturally evolved into building an entire processor around it.
 
-* RTL implementation
-* Testbench and simulation environment
-* Functional verification
-* Design documentation
+HX32 represents that evolution from arithmetic unit design to processor architecture design.
 
-Future work:
-This project will continue evolving beyond an ALU implementation. Additional modules and files will be added to the `rtl/` and `sim/` directories with the long-term objective of developing a more complete custom CPU architecture.
+---
+
+# Processor Overview
+
+| Feature | Description |
+|----------|------------|
+| Architecture | Single Cycle Harvard Architecture |
+| ISA Width | 32-bit |
+| Register Width | 32-bit |
+| Register Count | 32 General Purpose Registers |
+| Register x0 | Hardwired to Zero |
+| Program Counter | Dedicated 32-bit PC |
+| Stack Pointer | Dedicated 32-bit SP |
+| Instruction Memory | Separate from Data Memory |
+| Data Memory | Byte Addressable |
+| Execution Model | Single Cycle |
+| ISA Type | Custom RISC ISA |
+| Stack Support | Yes |
+| Function Calls | CALL / RET |
+| External I/O | IN / OUT Instructions |
+| Assembler Support | Yes |
+
+---
+
+# Architectural Overview
+
+HX32 follows a **Harvard Architecture**, meaning that instruction memory and data memory are physically separated.
+
+This allows instruction fetch and data access to occur independently and greatly simplifies the control logic for a single-cycle processor.
+
+The processor consists of the following major blocks:
+
+- Program Counter (PC)
+- Instruction Memory (IMEM)
+- Instruction Decoder
+- Register File
+- Arithmetic Logic Unit (ALU)
+- Data Memory (DMEM)
+- Stack Pointer (SP)
+- Control Unit
+- Input/Output Interface
+
+---
+
+# Datapath
+
+```
+                +--------------------+
+                | Program Counter    |
+                +---------+----------+
+                          |
+                          v
+                +--------------------+
+                | Instruction Memory |
+                +---------+----------+
+                          |
+                          v
+                +--------------------+
+                | Instruction Decode |
+                +---------+----------+
+                          |
+        +----------------+----------------+
+        |                                 |
+        v                                 v
++---------------+               +----------------+
+| Register File |-------------->|      ALU       |
++-------+-------+               +--------+-------+
+        |                                 |
+        |                                 v
+        |                       +----------------+
+        +---------------------->|  Data Memory   |
+                                +----------------+
+
+                       +----------------+
+                       | Stack Pointer  |
+                       +----------------+
+
+```
+
+---
+
+# Register File
+
+HX32 contains:
+
+- 32 General Purpose Registers
+- 32-bit register width
+- Register `x0` permanently tied to zero
+
+```
+x0  -> constant zero register
+x1  -> general purpose
+x2  -> general purpose
+...
+x31 -> general purpose
+```
+
+---
+
+# Program Counter
+
+The Program Counter stores the address of the instruction currently being executed.
+
+Normally:
+
+```text
+PC = PC + 4
+```
+
+However it may be modified by:
+
+- Branch Instructions
+- Jumps
+- CALL
+- RET
+
+---
+
+# Stack Pointer
+
+HX32 contains a dedicated stack pointer register.
+
+The stack:
+
+- grows downward in memory
+- uses 32-bit words
+- supports nested subroutine calls
+- supports local storage
+
+Supported stack instructions:
+
+```text
+PUSH
+POP
+CALL
+RET
+```
+
+---
+
+# Instruction Format
+
+## R-Type
+
+Used for register-register ALU operations.
+
+```text
+31      26 25    21 20    16 15    11 10     6 5      0
++---------+--------+--------+--------+--------+--------+
+| OPCODE  |  RD    |  RS1   |  RS2   | ALU OP | UNUSED |
++---------+--------+--------+--------+--------+--------+
+```
+
+---
+
+## I-Type
+
+Used for immediate instructions.
+
+```text
+31      26 25    21 20    16 15                       0
++---------+--------+--------+-------------------------+
+| OPCODE  |  RD    |  RS1   |         IMM16           |
++---------+--------+--------+-------------------------+
+```
+
+---
+
+# Instruction Set
+
+## Arithmetic
+
+```text
+ADD
+SUB
+MUL
+DIV
+MOD
+
+ADDI
+SUBI
+MULI
+DIVI
+MODI
+```
+
+---
+
+## Logical
+
+```text
+AND
+OR
+XOR
+NOT
+NAND
+NOR
+
+ANDI
+ORI
+XORI
+```
+
+---
+
+## Comparison
+
+```text
+CMP
+SLT
+SLTU
+
+SLTI
+SLTIU
+```
+
+---
+
+## Shift and Rotate
+
+```text
+SLL
+SRL
+SRA
+
+SLLI
+SRLI
+SRAI
+
+ROL
+ROR
+```
+
+---
+
+## Bit Manipulation
+
+```text
+POPCNT
+CLZ
+CTZ
+PARITY
+CRC8
+NEG
+ABS
+MIN
+MAX
+
+MINI
+MAXI
+```
+
+---
+
+## Memory Operations
+
+```text
+LOAD
+STORE
+```
+
+---
+
+## Stack Operations
+
+```text
+PUSH
+POP
+CALL
+RET
+```
+
+---
+
+## Branch Instructions
+
+```text
+BEQ
+BNE
+BLT
+BGE
+BLTU
+BGEU
+BZ
+BNZ
+```
+
+---
+
+## Control Flow
+
+```text
+JAL
+JALR
+```
+
+---
+
+## Data Movement
+
+```text
+MOV
+MOVI
+LUI
+AUIPC
+```
+
+---
+
+## Input / Output
+
+```text
+IN
+OUT
+```
+
+---
+
+## System Instructions
+
+```text
+NOP
+HALT
+```
+
+---
+
+# Memory Organization
+
+## Instruction Memory
+
+- Stores executable instructions
+- Word Addressable
+- Separate from data memory
+
+## Data Memory
+
+- Stores program data
+- Byte Addressable
+- Supports stack operations
+
+---
+
+# Assembler
+
+HX32 includes a custom assembler written in Python.
+
+The assembler converts:
+
+```asm
+MOVI x1,10
+MOVI x2,20
+ADD  x3,x1,x2
+OUT  x3
+HALT
+```
+
+into machine code suitable for simulation.
+
+This significantly simplifies:
+
+- ISA verification
+- Program development
+- Debugging
+- Testbench creation
+
+---
+
+# Simulation
+
+Simulation was performed using:
+
+- Vivado Simulator
+- Verilog Testbenches
+
+Verification includes:
+
+- Arithmetic operations
+- Immediate operations
+- Memory access
+- Stack operations
+- Function calls
+- Branches
+- Input/Output instructions
+
+---
+
+# Repository Structure
+
+```text
+rtl/
+├── HX32_ALU.v
+├── HX32_CPU.v
+
+sim/
+├── HX32_CPU_tb.v
+
+assembler/
+├── hx32_assembler.py
+
+docs/
+├── architecture.png
+├── ISA.md
+```
+
+---
+
+# Future Work
+
+Planned improvements include:
+
+- Pipelined architecture
+- Hazard detection
+- Data forwarding
+- Branch prediction
+- Interrupt handling
+- Memory mapped I/O
+- Peripheral integration
+- Cache support
+- Multi-cycle multiply/divide units
+
+---
+
+# License
+
+This project is released for educational and research purposes.
+
+---
+
+# Author
+
+Harsh Saita  
+Electronics and Communication Engineering  
+IIT Bhilai
