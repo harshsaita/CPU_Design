@@ -1,7 +1,8 @@
 # Why I Built This
 
 This project started while I was revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework. While studying the lecture notes of Dr. Smruti R. Sarangi (IIT Delhi).
-This project help me learn how to build a Custom ISA , Which kind of instructions are neccessary and which are not , And Of course the Use of AI when you are Stuck with your code and Debugging or Writing Testbenches
+This project help me learn how to build a Custom ISA , Which kind of instructions are neccessary and which are not.
+
 
 # HX32 CPU
 
@@ -9,17 +10,6 @@ A custom 32-bit single-cycle RISC processor written entirely in Verilog HDL as a
 
 HX32 started as a standalone ALU project and gradually evolved into a complete processor featuring a custom ISA, stack support, subroutine handling and an assembler for easier program development and ISA verification.
 
----
-
-# Motivation
-
-This project began while revisiting Computer Architecture and Computer Arithmetic concepts beyond regular coursework.
-
-The initial objective was to understand how arithmetic and logical operations are implemented in hardware by designing a custom ALU from scratch in Verilog.
-
-As the ALU grew in complexity with additional instructions and optimizations, the project naturally evolved into building an entire processor around it.
-
-HX32 represents that evolution from arithmetic unit design to processor architecture design.
 
 ---
 
