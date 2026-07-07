@@ -185,7 +185,7 @@ Used for immediate instructions.
 | OPCODE  |  RD    |  RS1   |         IMM16           |
 +---------+--------+--------+-------------------------+
 ```
-# J-Type
+## J-Type
 ```text
 Used for Branch or Jump Type instruction where there's a need to change the PC by the Branch Target
 
