@@ -186,13 +186,15 @@ Used for immediate instructions.
 +---------+--------+--------+-------------------------+
 ```
 # J-Type
-
+```text
 Used for Branch or Jump Type instruction where there's a need to change the PC by the Branch Target
 
 31            26 25      21 20      16 15                     0
 +---------------+----------+----------+-------------------------+
 |   OPCODE      |    RD    |   RS1    |        OFFSET           |       // other fields can be zero depending on the instruction
 +---------------+----------+----------+-------------------------+
+```
+
 ---
 
 # Instruction Set
@@ -287,7 +289,9 @@ MAXI
 LOAD
 STORE
 
-// these are I Type instruction typically represented as LOAD R2 , R3[21] ; // here we can see that we have the source and the destination regiters and the offset
+// these are I Type instruction typically represented as LOAD R2 , R3[21] ; 
+// here we can see that we have the source(R3) and the destination(R2) regiters and the offset (21)
+// which means that load the data stored at the memory location R3 + 21 into R2
 ```
 
 ---
